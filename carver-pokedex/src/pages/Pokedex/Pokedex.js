@@ -1,33 +1,36 @@
-import React from "react"
+import React, {useContext} from "react"
 import { MainContainer, HeaderHome, AreaCard, Card, StyledButton1, StyledButton2, CardButtons, CardImage } from "./Styled";
 import { TiDeleteOutline } from "react-icons/ti"
 import { ImInfo } from 'react-icons/im'
 import { goToHomePage, goToPokemonDetails } from "../../route/coordinator"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import GlobalStateContext from "../../context/GlobalContext/GlobalStateContext";
-import { useContext } from "react/cjs/react.development";
+import { useHistory } from "react-router-dom";
 
 const Pokedex = () => {
-  const [detais, poke,setPoke] = useContext(GlobalStateContext)
+  const [detais, poke, setPoke] = useContext(GlobalStateContext)
   const history = useHistory()
-
   const removePoke = (name) => {
     const indexPoke = detais.findIndex((pokes) => { return pokes.name === name })
     detais[indexPoke].isPokedex = false
     const indexPokedex = poke.findIndex((pokes) => { return pokes.name === name })
+
     poke.splice(indexPokedex,1)
     const copie=[...poke]
-    setPoke(copie)
-}
 
-  const pokedex = poke.map((pokes) => {
+    const remove = poke.splice(indexPokedex, 1)
+    const copie = [...poke]
+
+    setPoke(copie)
+  }
+
+  const pokedex = poke && poke.map((pokes) => {
   
    if(pokes.isPokedex){
     return (
       <Card key={pokes.name}>
         <CardImage>
-          <img src={pokes.photo} alt={pokes.name} />
-          <p>{pokes.name}</p>
+          <img src={pokes.photo && pokes.photo} alt={pokes.name} />
+          <p>{pokes.name && pokes.name}</p>
         </CardImage>
         <CardButtons>
           <StyledButton2 onClick={()=>removePoke(pokes.name,pokes.isPokedex)}><TiDeleteOutline size="2.8em" /> </StyledButton2>
